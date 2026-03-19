@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authRepository } from '../../data/repositories/authRepository';
 import { useAppStore } from '../store/useAppStore';
 import { LoginFormData, RegisterFormData } from '../../domain/schemas/authSchema';
@@ -8,6 +8,7 @@ export function useAuthViewModel() {
   const navigate = useNavigate();
   const setAuth = useAppStore((state) => state.setAuth);
   const clearAuth = useAppStore((state) => state.clearAuth);
+  const queryClient = useQueryClient();
 
   const loginMutation = useMutation({
     mutationFn: (data: LoginFormData) => authRepository.login(data),
@@ -19,9 +20,13 @@ export function useAuthViewModel() {
   });
 
   const registerMutation = useMutation({
-    mutationFn: (data: RegisterFormData) => authRepository.register(data),
+    mutationFn: async (data: RegisterFormData) => {
+      // O backend retorna apenas o usuário no registro, não o token.
+      // Precisamos fazer o login imediatamente após o registro.
+      await authRepository.register(data);
+      return authRepository.login({ email: data.email, password: data.password });
+    },
     onSuccess: (data) => {
-      // Alguns backends já loga o usuario no registro. Se não, precisaríamos ajustar isso.
       setAuth(data.token, data.user);
       navigate('/');
     },
@@ -31,12 +36,12 @@ export function useAuthViewModel() {
     mutationFn: () => authRepository.logout(),
     onSuccess: () => {
       clearAuth();
-      navigate('/login');
+      queryClient.clear();
     },
     onError: () => {
       // Mesmo se a API falhar o logout, limpa localmente
       clearAuth();
-      navigate('/login');
+      queryClient.clear();
     }
   });
 

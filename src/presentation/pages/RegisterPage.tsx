@@ -28,72 +28,72 @@ export function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#0B1120] text-white p-4 font-sans">
-      <div className="w-full max-w-sm">
-        <h1 className="text-3xl font-bold text-center mb-10">Mini Twitter</h1>
+    <div className="flex min-h-screen items-center justify-center bg-[var(--bg-page)] text-[var(--text-main)] p-4 font-sans transition-colors">
+      <div className="w-full max-w-[480px]">
+        <h1 className="text-3xl font-bold text-center mb-10 text-[var(--color-brand)] transition-colors">Mini Twitter</h1>
 
-        <div className="flex border-b border-gray-800 mb-8 mt-2">
-          <Link to="/login" className="flex-1 pb-3 text-center font-semibold text-gray-500 hover:text-gray-300 border-b-[3px] border-transparent transition-colors">
+        <div className="flex border-b border-[var(--border-ui)] mb-8 mt-2 transition-colors">
+          <Link to="/login" className="flex-1 pb-3 text-center font-semibold text-[var(--text-muted)] hover:text-[var(--text-main)] border-b-[3px] border-transparent transition-colors">
             Login
           </Link>
-          <Link to="/register" className="flex-1 pb-3 text-center font-semibold text-white border-b-[3px] border-blue-500">
+          <Link to="/register" className="flex-1 pb-3 text-center font-semibold text-[var(--text-main)] border-b-[3px] border-blue-500">
             Cadastrar
           </Link>
         </div>
 
         <div className="mb-8">
-          <h2 className="text-[28px] leading-tight font-bold mb-1.5 tracking-tight">Olá, vamos começar!</h2>
-          <p className="text-gray-400 text-[15px]">Por favor, insira os dados solicitados para fazer cadastro.</p>
+          <h2 className="text-[28px] leading-tight font-bold mb-1.5 tracking-tight text-[var(--color-brand)] dark:text-[var(--text-main)]">Olá, vamos começar!</h2>
+          <p className="text-[var(--text-muted)] text-[15px]">Por favor, insira os dados solicitados para fazer cadastro.</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="block text-[13px] text-gray-300 mb-2">
+            <label className="block text-[13px] text-[var(--text-muted)] mb-2 font-medium">
               Nome
             </label>
             <div className="relative">
               <input
                 type="text"
                 {...register('name')}
-                className="w-full pl-4 pr-10 py-3 bg-[#1E293B] border border-gray-700/50 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none transition-all text-white placeholder-gray-500"
+                className="w-full pl-4 pr-10 py-3 bg-[var(--bg-input)] border border-[var(--border-ui)] rounded-lg focus:ring-1 focus:ring-blue-500 outline-none transition-all text-[var(--text-main)] placeholder-[var(--text-muted)]"
                 placeholder="Insira o seu nome"
               />
-              <User className="absolute right-3.5 top-3.5 text-gray-500" size={18} strokeWidth={2} />
+              <User className="absolute right-3.5 top-3.5 text-[var(--color-brand)] transition-colors" size={18} strokeWidth={2} />
             </div>
             {errors.name && <p className="text-red-500 text-xs mt-1.5">{errors.name.message}</p>}
           </div>
 
           <div>
-            <label className="block text-[13px] text-gray-300 mb-2">
+            <label className="block text-[13px] text-[var(--text-muted)] mb-2 font-medium">
               E-mail
             </label>
             <div className="relative">
               <input
                 type="email"
                 {...register('email')}
-                className="w-full pl-4 pr-10 py-3 bg-[#1E293B] border border-gray-700/50 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none transition-all text-white placeholder-gray-500"
+                className="w-full pl-4 pr-10 py-3 bg-[var(--bg-input)] border border-[var(--border-ui)] rounded-lg focus:ring-1 focus:ring-blue-500 outline-none transition-all text-[var(--text-main)] placeholder-[var(--text-muted)]"
                 placeholder="Insira o seu e-mail"
               />
-              <Mail className="absolute right-3.5 top-3.5 text-gray-500" size={18} strokeWidth={2} />
+              <Mail className="absolute right-3.5 top-3.5 text-[var(--color-brand)] transition-colors" size={18} strokeWidth={2} />
             </div>
             {errors.email && <p className="text-red-500 text-xs mt-1.5">{errors.email.message}</p>}
           </div>
 
           <div>
-            <label className="block text-[13px] text-gray-300 mb-2">
+            <label className="block text-[13px] text-[var(--text-muted)] mb-2 font-medium">
               Senha
             </label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 {...register('password')}
-                className="w-full pl-4 pr-10 py-3 bg-[#1E293B] border border-gray-700/50 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none transition-all text-white placeholder-gray-500"
+                className="w-full pl-4 pr-10 py-3 bg-[var(--bg-input)] border border-[var(--border-ui)] rounded-lg focus:ring-1 focus:ring-blue-500 outline-none transition-all text-[var(--text-main)] placeholder-[var(--text-muted)]"
                 placeholder="Insira a sua senha"
               />
               <button 
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-3.5 text-gray-500 hover:text-gray-300 transition-colors focus:outline-none"
+                className="absolute right-3.5 top-3.5 text-[var(--color-brand)] hover:text-blue-500 transition-colors focus:outline-none"
                 tabIndex={-1}
               >
                 {showPassword ? <Eye size={18} strokeWidth={2} /> : <EyeOff size={18} strokeWidth={2} />}
@@ -103,23 +103,23 @@ export function RegisterPage() {
           </div>
 
           {registerError && (
-             <p className="text-red-400 text-[13px] text-center font-medium bg-red-900/20 py-2 rounded-lg border border-red-900/40">
-                 Erro: e-mail já em uso ou inválido
+             <p className="text-red-500 text-[13px] text-center font-medium bg-red-500/10 py-2.5 rounded-lg border border-red-500/20 px-2">
+                 {(registerError as any)?.response?.data?.error || "Erro ao realizar cadastro. Tente novamente."}
              </p>
           )}
 
           <button
             type="submit"
             disabled={!isValid || isRegistering}
-            className="w-full bg-[#0ea5e9] hover:bg-blue-500 active:bg-blue-600 text-white font-semibold py-3 px-4 rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed !mt-8 shadow-[0_0_20px_rgba(14,165,233,0.2)] hover:shadow-[0_0_25px_rgba(14,165,233,0.3)]"
+            className="w-full bg-[#0D93F2] hover:bg-blue-500 active:bg-blue-600 text-white font-semibold py-3 px-4 rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed !mt-8 shadow-md hover:shadow-lg active:scale-[0.98]"
           >
             {isRegistering ? 'Continuando...' : 'Continuar'}
           </button>
         </form>
 
-        <p className="text-center mt-8 text-[11px] text-gray-500 max-w-[280px] mx-auto leading-relaxed">
+        <p className="text-center mt-8 text-[11px] text-[var(--text-muted)] max-w-[280px] mx-auto leading-relaxed">
           Ao clicar em continuar, você concorda com nossos <br/>
-          <a href="#" className="underline hover:text-gray-300 transition-colors">Termos de Serviço</a> e <a href="#" className="underline hover:text-gray-300 transition-colors">Política de Privacidade</a>.
+          <a href="#" className="underline hover:text-[var(--text-main)] transition-colors">Termos de Serviço</a> e <a href="#" className="underline hover:text-[var(--text-main)] transition-colors">Política de Privacidade</a>.
         </p>
       </div>
     </div>

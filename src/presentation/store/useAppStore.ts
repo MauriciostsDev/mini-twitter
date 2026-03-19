@@ -31,7 +31,7 @@ export const useAppStore = create<AppState>()(
       clearAuth: () => set({ token: null, user: null, isAuthenticated: false }),
 
       // Initial Theme State
-      isDarkMode: false,
+      isDarkMode: true,
       toggleTheme: () =>
         set((state) => {
           const newDarkMode = !state.isDarkMode;
@@ -48,3 +48,8 @@ export const useAppStore = create<AppState>()(
     }
   )
 );
+
+export const useSearchStore = create<{ searchQuery: string; setSearchQuery: (q: string) => void }>()((set) => ({
+  searchQuery: '',
+  setSearchQuery: (q) => set({ searchQuery: q })
+}));

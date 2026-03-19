@@ -1,11 +1,11 @@
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { postRepository } from '../../data/repositories/postRepository';
 import { CreatePostFormData } from '../../domain/schemas/postSchema';
-import { useState } from 'react';
+import { useSearchStore } from '../store/useAppStore';
 
 export function useFeedViewModel() {
   const queryClient = useQueryClient();
-  const [searchQuery, setSearchQuery] = useState('');
+  const searchQuery = useSearchStore(state => state.searchQuery);
 
   // Infinite Query para buscar posts
   const {
@@ -43,7 +43,7 @@ export function useFeedViewModel() {
 
   // Action para editar post
   const editMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string, data: { title: string, content: string, image?: string } }) => postRepository.updatePost(id, data),
+    mutationFn: ({ id, data }: { id: string, data: { title?: string, content: string, image?: string } }) => postRepository.updatePost(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] });
     },
@@ -67,7 +67,7 @@ export function useFeedViewModel() {
            pages: oldData.pages.map((page: any) => ({
              ...page,
              posts: page.posts.map((post: any) => {
-               if (post.id === id) {
+               if (String(post.id) === String(id)) {
                  const isLiking = !post.likedByMe;
                  return {
                    ...post,
@@ -83,14 +83,30 @@ export function useFeedViewModel() {
       
       return { previousData };
     },
-    onError: (_err, _newLike, context) => {
-      // Rollback se a API falhar
-      if (context?.previousData) {
-        queryClient.setQueryData(['posts', searchQuery], context.previousData);
-      }
+    onSuccess: (data, id) => {
+      // Sincroniza o estado real vindo do server
+      queryClient.setQueryData(['posts', searchQuery], (oldData: any) => {
+        if (!oldData) return oldData;
+        
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page: any) => ({
+            ...page,
+            posts: page.posts.map((post: any) => {
+              if (String(post.id) === String(id)) {
+                return {
+                  ...post,
+                  likedByMe: data.liked
+                }
+              }
+              return post;
+            })
+          }))
+        }
+      });
     },
     onSettled: () => {
-      // Re-valida em background
+      // Re-valida em background para garantir consistência total
     //   queryClient.invalidateQueries({ queryKey: ['posts', searchQuery] });
     }
   });
@@ -110,7 +126,6 @@ export function useFeedViewModel() {
 
     // Busca
     searchQuery,
-    setSearchQuery,
     refetch,
     
     // Ações
@@ -122,7 +137,7 @@ export function useFeedViewModel() {
     deletePost: deleteMutation.mutate,
     isDeleting: deleteMutation.isPending,
 
-    editPost: async (id: string, data: { title: string, content: string, image?: string }) => {
+    editPost: async (id: string, data: { title?: string, content: string, image?: string }) => {
       await editMutation.mutateAsync({ id, data });
     },
     isEditing: editMutation.isPending,

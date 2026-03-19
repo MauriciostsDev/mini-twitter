@@ -4,7 +4,7 @@ export interface Post {
   authorName: string;
   title: string;
   content: string;
-  imageUrl?: string;
+  image?: string;
   likesCount: number;
   likedByMe: boolean;
   createdAt: string;

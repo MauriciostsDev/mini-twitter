@@ -5,7 +5,6 @@ import { LoginPage } from './presentation/pages/LoginPage';
 import { RegisterPage } from './presentation/pages/RegisterPage';
 import { FeedPage } from './presentation/pages/FeedPage';
 import { Layout } from './presentation/components/ui/Layout';
-import { ProtectedRoute } from './presentation/components/ui/ProtectedRoute';
 import { useAppStore } from './presentation/store/useAppStore';
 
 const queryClient = new QueryClient({
@@ -40,11 +39,7 @@ export default function App() {
           {/* Rotas Protegidas com Layout */}
           <Route 
             path="/" 
-            element={
-              <ProtectedRoute>
-                <Layout />
-              </ProtectedRoute>
-            }
+            element={<Layout />}
           >
             <Route index element={<FeedPage />} />
           </Route>
