@@ -32,16 +32,7 @@ export const useAppStore = create<AppState>()(
 
       // Initial Theme State
       isDarkMode: true,
-      toggleTheme: () =>
-        set((state) => {
-          const newDarkMode = !state.isDarkMode;
-          if (newDarkMode) {
-            document.documentElement.classList.add('dark');
-          } else {
-            document.documentElement.classList.remove('dark');
-          }
-          return { isDarkMode: newDarkMode };
-        }),
+      toggleTheme: () => set((state) => ({ isDarkMode: !state.isDarkMode })),
     }),
     {
       name: 'mini-twitter-storage', // key in localStorage
